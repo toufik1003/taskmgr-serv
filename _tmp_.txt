@@ -1,0 +1,35 @@
+setup mysql & start the docker mysql container=>
+docker run -p 2012:3306 --name=mysql-db-taskmgr -e MYSQL_ROOT_PASSWORD=secret1 -e MYSQL_USER=test -e MYSQL_PASSWORD=test123 -e MYSQL_DATABASE=taskmanager -d mysql
+
+docker ps -a
+
+login to docker mysql container bash shell=>
+docker exec -it mysql-db-taskmgr bash
+
+run mysql commandline=>
+mysql -utest -ptest123
+
+docker inspect mysql-db-taskmgr
+
+docker logs mysql-db-taskmgr
+
+
+"IPAddress": "172.17.0.7"
+
+
+--
+build image=>
+docker build -f Dockerfile -t taskmanager-srv .
+
+run image with link=>
+docker run -t -d --name taskmanager-srv-container --link mysql-db-taskmgr:mysql -p 8087:9091 taskmanager-srv
+
+docker exec -it taskmanager-srv-container bash
+
+docker container stop taskmanager-srv-container
+docker container rm taskmanager-srv-container
+
+
+
+
+
