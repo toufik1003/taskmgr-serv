@@ -1,33 +1,41 @@
 setup mysql & start the docker mysql container=>
-docker run -p 2012:3306 --name=mysql-db-taskmgr -e MYSQL_ROOT_PASSWORD=secret1 -e MYSQL_USER=test -e MYSQL_PASSWORD=test123 -e MYSQL_DATABASE=taskmanager -d mysql
+dockerx run -p 2012:3307 --name=mysql-db-taskmgr -e MYSQL_ROOT_PASSWORD=secret1 -e MYSQL_USER=test -e MYSQL_PASSWORD=test123 -e MYSQL_DATABASE=taskmanager -d mysql
 
 docker ps -a
 
 login to docker mysql container bash shell=>
-docker exec -it mysql-db-taskmgr bash
+dockerx exec -it mysql-db-taskmgr bash
 
 run mysql commandline=>
 mysql -utest -ptest123
 
-docker inspect mysql-db-taskmgr
+dockerx inspect mysql-db-taskmgr
 
-docker logs mysql-db-taskmgr
+dockerx logs mysql-db-taskmgr
 
 
-"IPAddress": "172.17.0.7"
+dockerx container stop mysql-db-taskmgr
+dockerx container rm mysql-db-taskmgr
 
 
 --
 build image=>
-docker build -f Dockerfile -t taskmanager-srv .
+dockerx build -f Dockerfile -t taskmanager-srv .
 
 run image with link=>
-docker run -t -d --name taskmanager-srv-container --link mysql-db-taskmgr:mysql -p 8087:9091 taskmanager-srv
+dockerx run -t -d --name taskmanager-srv-container --link mysql-db-taskmgr:mysql -p 1081:9091 taskmanager-srv
+dockerx logs taskmanager-srv-container
+dockerx inspect taskmanager-srv-container
 
-docker exec -it taskmanager-srv-container bash
+dockerx exec -it taskmanager-srv-container bash
 
-docker container stop taskmanager-srv-container
-docker container rm taskmanager-srv-container
+dockerx container stop taskmanager-srv-container
+dockerx container rm taskmanager-srv-container
+
+dockerx ps --filter "names=taskmanager-srv-container"
+
+
+curl -i -H "Accept: application/json" "http://localhost:9091/taskmanager-srv/actuator/health"
 
 
 
