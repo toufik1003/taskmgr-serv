@@ -59,10 +59,10 @@ pipeline {
             @echo off
 			dockerx inspect -f '{{.State.Running}}' taskmanager-srv-container  && (
 				dockerx container rm -f taskmanager-srv-container
-				dockerx run -t -d --name taskmanager-srv-container --link mysql-db-taskmgr:mysql -p 1081:9091 taskmanager-srv
+				dockerx run -t -d --name taskmanager-srv-container --link mysql-db-taskmgr:mysql -p 8081:9091 taskmanager-srv
 			) || (
 			  echo container [taskmanager-srv-container] does not exists, need to create and run ...
-			  dockerx run -t -d --name taskmanager-srv-container --link mysql-db-taskmgr:mysql -p 1081:9091 taskmanager-srv
+			  dockerx run -t -d --name taskmanager-srv-container --link mysql-db-taskmgr:mysql -p 8081:9091 taskmanager-srv
 			)
         '''
       }      

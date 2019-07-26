@@ -25,7 +25,7 @@ build image=>
 dockerx build -f Dockerfile -t taskmanager-srv .
 
 run image with link=>
-dockerx run -t -d --name taskmanager-srv-container --link mysql-db-taskmgr:mysql -p 1081:9091 taskmanager-srv
+dockerx run -t -d --name taskmanager-srv-container --link mysql-db-taskmgr:mysql -p 8082:9091 taskmanager-srv
 dockerx logs taskmanager-srv-container
 dockerx inspect taskmanager-srv-container
 
@@ -38,6 +38,13 @@ dockerx ps --filter "names=taskmanager-srv-container"
 
 
 curl -i -H "Accept: application/json" "http://localhost:9091/taskmanager-srv/actuator/health"
+
+
+/*** UI ***/
+dockerx build -f Dockerfile -t taskmanager-ui .
+dockerx run -t -d --name taskmanager-ui --link taskmanager-srv-container:taskmanager-srv -p 1081:80 taskmanager-ui
+
+
 
 
 
