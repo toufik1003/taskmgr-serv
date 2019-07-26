@@ -10,6 +10,8 @@ run mysql commandline=>
 mysql -utest -ptest123
 
 dockerx inspect mysql-db-taskmgr
+dockerx inspect -f '{{.State.Running}}' mysql-db-taskmgr
+dockerx ps -q -f name=mysql-db-taskmgr
 
 dockerx logs mysql-db-taskmgr
 
