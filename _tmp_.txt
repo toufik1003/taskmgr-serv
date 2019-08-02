@@ -38,11 +38,14 @@ dockerx ps --filter "names=taskmanager-srv-container"
 
 
 curl -i -H "Accept: application/json" "http://localhost:9091/taskmanager-srv/actuator/health"
+curl -i -H "Accept: application/json" "http://taskmanager-srv-container:9091/taskmanager-srv/actuator/health"
 
 
 /*** UI ***/
 dockerx build -f Dockerfile -t taskmanager-ui .
 dockerx run -t -d --name taskmanager-ui --link taskmanager-srv-container:taskmanager-srv -p 1081:80 taskmanager-ui
+
+dockerx exec -it taskmanager-ui bash
 
 
 
